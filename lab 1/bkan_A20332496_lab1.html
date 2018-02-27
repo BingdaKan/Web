@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lab1 - Bingda Kan</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		body{
+			width: 90%;
+			margin-left: 4%;
+			font-family: 'Roboto', sans-serif;
+		}
+
+		h2{
+			margin-bottom: 30px;
+		}
+
+		.lb{
+			width: 280px;
+		}
+
+		.lb input{
+			float: right;
+			padding-left: 2px;
+		}
+
+		#Quantity{
+			border-color: #000;
+			border-radius:6px;
+		}
+
+		#Body_Text{
+			border-color: #000;
+			border-radius:6px;
+		}
+
+		#Color{
+			border-color: #000;
+			border-radius:6px;
+			border: solid 2px;
+			width: 175px;
+			float: right;	
+		}
+
+		#Run{
+			border-radius:6px;
+			background: #FFF;
+			border-color: #000;
+			box-shadow: none;
+			width: 100px;
+		}
+
+		#Reset{
+			border-radius:6px;
+			background: #FFF;
+			border-color: #000;
+			box-shadow: none;
+			width: 100px;
+			margin-left: 40px;
+		}
+		
+		#Run:hover{
+			background-color: #F0F0F0;
+		}
+
+		#Reset:hover{
+			background-color: #F0F0F0;
+		}
+
+		.result{
+			margin-bottom: 20px;
+		}
+
+		.result p{
+			padding-right: 20px;
+			padding-left: 20px;
+			font-size: 20px;
+			word-wrap: break-word; 
+		}
+
+		.result h2{
+			padding-left: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>ITMD - 565 - lab 1</h1>
+	<h2>Bingda Kan, bkan@hawk.iit.edu</h2>
+	<fieldset>
+	<p class = "lb"><label>Body Text: </label><input type="text" name="Body_Text" id="Body_Text" placeholder="Enter text here"></p>
+	<p class = "lb"><label>Quantity: </label><input type="text" name="Quantity" id="Quantity" placeholder="Enter a number here"></p>
+	<p class = "lb"><label>Color: </label><select type="text" name="Color" id="Color">
+		<option value="red">Red</option>
+		<option value="green">Green</option>
+		<option value="blue">Blue</option>
+	</select></p>
+	<p class="lb">
+	<button id="Run">Run Lab</button>
+	<button id="Reset" disabled="true">Reset Lab</button>
+	</p>
+	</fieldset>
+	<h1>Results</h1>
+	<div id="text"></div>
+
+	<script type="text/javascript">
+		var btn_run = document.getElementById("Run");
+		var btn_reset = document.getElementById("Reset");
+		var results = document.getElementById("text");
+
+		// function run
+		btn_run.addEventListener('click', function(){
+			var input_text = document.getElementById("Body_Text");
+			var color = document.getElementById("Color");
+			var quantity = document.getElementById("Quantity");
+			var qty = parseInt(quantity.value);
+			
+			// clear the last run results
+			while (results.firstChild) {
+			  results.removeChild(results.firstChild);
+			}
+			
+			// judge the input text is null or not
+			if(input_text.value == ""){
+				alert("Body Text can't be empty"); // invalid, display alart
+				input_text.style.borderColor =  "red"; // and input box border change to red color
+				return false;
+			}else{
+				input_text.style.borderColor =  "#000"; // valid, dislay regular color
+			}
+			
+			// judge the input number is valid or not
+			if(quantity.value != qty || qty < 0) //Any number that isn't a postive integer will be invalid, such as space, float, negative number, etc.
+			{
+				alert("Please enter a correct number");// invalid, display alart
+				quantity.style.borderColor = "red"; 
+				return false;
+			}else{
+				quantity.style.borderColor =  "#000"; 
+			}
+		    
+		    // create the results      
+			for(var i = 0; i < qty; i++){
+				var divWrapper = document.createElement("div"); 
+				divWrapper.id = 'div-wrapper' + i;
+				divWrapper.className = 'result';
+
+				// h2 "Output"
+				var hdline = document.createElement("h2"); 
+				hdline.style.color = color.value;
+				var hdtext = document.createTextNode("Output " + (i + 1));
+				hdline.appendChild(hdtext);
+				divWrapper.appendChild(hdline);
+				
+				// text that user input
+				var bdy = document.createElement("p"); 
+				var bdytext = document.createTextNode(input_text.value);
+				bdy.appendChild(bdytext);
+				divWrapper.appendChild(bdy);
+				
+				// color that user choose
+				results.appendChild(divWrapper);
+				divWrapper.style.border = "solid";
+				divWrapper.style.borderColor = color.value; 
+			}
+			btn_reset.disabled = false;
+		});
+	
+		// function reset, which reset all including results and input box
+		btn_reset.addEventListener('click', function(){
+
+			var input_text = document.getElementById("Body_Text");
+			var color = document.getElementById("Color");
+			var quantity = document.getElementById("Quantity");
+
+			while (results.firstChild) {
+			  results.removeChild(results.firstChild);
+			}
+
+			input_text.value = "";
+			quantity.value = "";
+			color.value = "red";
+			input_text.style.borderColor =  "#000";
+			quantity.style.borderColor =  "#000";
+			btn_reset.disabled = true;
+		});
+		
+	</script>
+</body>
+</html>

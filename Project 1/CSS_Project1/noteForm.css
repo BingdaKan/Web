@@ -1,0 +1,57 @@
+#form-container{
+	width: 1000px;
+	height: 170px;
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+	margin: 0 auto;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
+#noteForm{
+  margin: 0 auto;
+  height: 20px;
+  width: 950px;
+}
+
+input{
+	margin-left: 20px;
+}
+
+#NameText{
+	margin-top: 20px;
+	border: none;
+	width: 230px;
+	height: 30px;
+	border-radius: 5px;
+  	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+#Sub{
+	margin-top: 20px;
+	height: 30px;
+	border: none;
+	width: 500px;
+	border-radius: 5px;
+  	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+#lbsub{
+	float: right;
+}
+
+#sub:hover{
+	border-color: #90CAFF;
+}
+
+#Msg{
+	border: none;
+	width:850px;
+	resize: none;
+	float: right;
+	border-radius: 5px;
+  	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+#lbmsg{
+	margin-top:20px;
+}

@@ -1,0 +1,77 @@
+body{
+	width: 100%;
+	margin: 0 auto;
+	font-family:Arial;
+}
+
+#header{
+	min-width: 1000px;
+	width: 100%;
+	background: #F0F0F0;
+	height: 50px;
+	margin: 0 auto;
+	font-family: 'Coda', cursive;
+	background: #323232;
+}
+
+#header .container{
+	width:1000px;
+	list-style-type: none;
+	margin: 0 auto;
+	
+}
+
+li{
+	color: #000;
+	float:left;
+	text-align: center;
+}
+
+#logo{
+	color: #FFF;
+	font-weight: 900;
+	position: relative;
+	font-size: 30px;
+	top: 6px;
+}
+
+#count{
+	color: #FFF;
+	position: relative;
+	font-size: 20px;
+	top: 6px;
+}
+
+form{
+	margin-top:20px;
+}
+
+.container_search{
+	float: right;
+	
+}
+
+#SearchIcon{
+	position: relative;
+	top: 13px;
+	height:25px;
+	width: 25px;
+}
+
+.light-table-filter{
+	position: relative;
+	top: 4px;
+	margin:0 auto;
+	border: none;
+	width: 230px;
+	height: 30px;
+	border-radius: 5px;
+  	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+  	-webkit-transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4);
+  	transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4);
+}
+
+.button{
+	width: 1000px;
+	margin: 0 auto;
+}

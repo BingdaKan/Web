@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Smart Note</title>
+	<link rel="stylesheet" type="text/css" href="CSS_Project1/main.css">
+	<link rel="stylesheet" type="text/css" href="CSS_Project1/noteTable.css">
+	<link rel="stylesheet" type="text/css" href="CSS_Project1/noteForm.css">
+	<link rel="stylesheet" type="text/css" href="CSS_Project1/noteButton.css">
+	<link rel="stylesheet" type="text/css" href="CSS_Project1/Log.css">
+	<link href='https://fonts.googleapis.com/css?family=Coda:400,800' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="JS_Project1/main_js.js"></script>
+</head>
+<body>
+	<header id="header">
+		<div class="container">
+			<li class="container_logo"> <span id ="logo">SmartNote </span><span id ="count"></span></li>
+			<div class="container_search">
+				<img src="Image_Project1/search_glass.png" id ="SearchIcon">
+				<input type="search" class="light-table-filter" data-table="order-table" placeholder="Search">
+			</div>
+		</div>	
+	</header>
+
+	<br><br>
+	<a class ="navigation">
+		<span class="logTitle">Log In</span><br><br>
+		<input class="logIpt" type="text" placeholder="User name">
+		<input class="logIpt" type="text" placeholder="Password">
+		<button class='go'>GO</button>
+	</a>
+
+	<table class = "order-table table" id="noteList">
+	</table>
+
+	<br>
+	<div class="button">
+			<button id="btn_new">Add a Note</button><button id="btn_clear">Clear All</button>
+	</div>
+
+	<br><br>
+	<div id="form-container">
+	<form id="noteForm">
+		<p class = "lb">
+			<label id="lbname">Name: <input type="text" name="NameText" id="NameText" placeholder="Enter Your Name Here"></label>
+			<label id="lbsub">Subject: <input type="text" name="Sub" id="Sub" placeholder="Enter Subject Here"></label>
+		</p>
+		<p class = "lb">
+			<label id="lbmsg">Message: </label><textarea name="Msg" id="Msg" placeholder="Enter Content Here"></textarea>
+		</p>
+		
+		<button id="btn_save"><span>Save</span><img src = "Image_Project1/save_btn.png" class='icon'></button>
+		<br><br><br>
+	</form>
+	</div>
+	
+</body>
+</html>

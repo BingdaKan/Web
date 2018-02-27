@@ -1,0 +1,44 @@
+body{
+	width: 650px;
+	margin: 0 auto;
+}
+
+#start{
+	border-radius: 5px;
+	width: 100px;
+	height: 40px;
+	margin-bottom: 30px;
+	margin-top: 20px;
+}
+
+.container{
+	width: 100%;
+	text-align: center;
+}
+
+.guide{
+	margin-top:30px;
+}
+
+.Detail{
+	position: fixed;
+	left: -220px;
+	margin-top:150px;
+	margin-left: 20px;
+	opacity: 0.4;
+	display: block;
+	text-decoration: none;
+	text-align: center;
+	padding: 1.5em;
+	width: 250px;
+	height: 300;
+	border-radius: 10px;
+	color: #000;
+	background-color: #FFFDA4;
+	transition-duration: 1.5s;
+}
+
+.Detail:hover, .Detail:focus{
+	left:-20px;
+	opacity: 0.7;
+}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ITMD-4/565 Lab 3 - Canvas Drawing</title>
+	<style type="text/css">
+		#content-wrapper {
+			width: 600px;
+			margin: 0 auto;
+			text-align: center;
+		}
+		#canvasRun {
+			background-color: #c00;
+			border: 0;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div id="content-wrapper">
+		<button id="canvasRun">Draw Canvas</button><br><br>
+		<canvas id="myCanvas" width="600" height="450"></canvas>
+	</div>
+	<script type="text/javascript">
+		// Canvas Drawing Code Here
+		(function(){
+
+			var btn_runCan = document.getElementById("canvasRun");
+			btn_runCan.addEventListener("click", canvas);
+			var canvas = document.getElementById('myCanvas');
+			var ctx = canvas.getContext('2d');
+		
+		function canvas(){	
+			
+			var ang = 0;
+			var time = 0;
+
+			window.requestAnimationFrame(drawFrame);
+
+			function drawFrame(){
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				ctx.save();
+
+				//background
+				var grd = ctx.createLinearGradient(0,0,0,450);
+				grd.addColorStop(0,"white");
+				grd.addColorStop(1,"black");
+				ctx.fillStyle = grd;
+				ctx.fillRect(0,0,canvas.width,canvas.height);
+
+				//1. header
+				var x1 = canvas.width/2;
+				var y1 = 60;
+
+				ctx.textAlign="center";
+				ctx.font = '32px sans-serif';
+				ctx.fillStyle = 'red';
+				ctx.fillText("ITMD 565 Canvas Lab", x1, y1);
+				
+				//2. line	
+				var x2 = 20;
+				var y2 = y1 + 20;	
+
+				ctx.beginPath();
+				ctx.strokeStyle = '#cc0000';
+				ctx.lineWidth = 3;
+				ctx.moveTo(x2,y2);
+				ctx.lineTo(canvas.width-20, y2);
+				ctx.stroke();
+		
+				//3. circle
+				var x3 = x2 + 70;
+				var y3 = y2 + 80;	
+
+				ctx.beginPath();
+				ctx.strokeStyle = '#FFF';
+				ctx.fillStyle = 'blue';
+				ctx.arc(x3,y3,50,0,2*Math.PI);
+				ctx.fill();
+				ctx.stroke();
+
+				//4. triangle
+				var x4 = x3;
+				var y4 = y3 + 90;	
+
+				ctx.beginPath();
+				ctx.strokeStyle = 'rgb(0,200,0)';
+				ctx.fillStyle = 'rgb(0,200,0)';
+				ctx.moveTo(x4,y4);
+				ctx.lineTo(x4 - 50, Math.sqrt(10000 - 2500) + y4);
+				ctx.lineTo(x4 + 50, Math.sqrt(10000 - 2500) + y4);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+				
+				//5. circle rotate animation
+				var x5 = x3 + 205;
+				var y5 = y3;
+					
+				ctx.save();
+				ctx.translate(x5,y5); 
+				ctx.rotate(Math.PI/20*time);					
+				time += 1;												
+				ctx.beginPath();
+				ctx.lineWidth = 15;
+				ctx.strokeStyle = '#FFA500';
+				ctx.arc(0, 0, 50,0, (Math.PI/180)*150);
+				ctx.stroke();
+																	
+				ctx.restore();			
+				
+				//6. rectangle rotate animation
+				var x6 = x5 + 165;
+				var y6 = y5 - 50;
+
+				ctx.save();
+				ctx.translate(x6+50, y6+50);
+				ctx.rotate(Math.PI/360*ang);
+				ang += 1;
+				ctx.beginPath();
+				ctx.rect(-50, -50, 100, 100);
+				ctx.lineWidth = 5;
+				ctx.strokeStyle = "#FFF";
+				ctx.fillStyle = "red";
+				ctx.fill();
+				ctx.stroke();
+					
+				ctx.restore();
+
+				//7. curve
+				var x7 = x5 - 50;
+				var y7 = y4 - 10;
+
+				ctx.beginPath();
+				ctx.rect(x7, y7, 320, 100);
+				ctx.fillStyle = "#FFF";
+				ctx.fill();
+
+				ctx.beginPath();
+				ctx.strokeStyle = "#000";
+				ctx.setLineDash([10,4]);
+				ctx.lineWidth = 2;
+				ctx.moveTo(x7+30, y7+50);
+				ctx.bezierCurveTo(x7+140, y7-20, x7+180, y7+120, x7+290, y7+50);
+				ctx.stroke();
+				
+
+				//8. name and email
+				var x8 = x2 + 10;
+				var y8 = y7 + 160;
+
+				ctx.textAlign = "start";
+				ctx.font = '14px sans-serif';
+				ctx.fillText("Bingda Kan", x8, y8);
+				ctx.fillText("bkan@hawk.iit.edu", x8, y8+20);
+
+				//9. image
+				var x9 = x7 + 50;
+				var y9 = y8 - 40;
+				var img = new Image();
+				img.src = 'IIT_SAT_stack_186_white.png';		
+				ctx.drawImage(img, x9, y9,280,65);
+				
+				ctx.restore();
+
+				window.requestAnimationFrame(drawFrame);
+				}		
+			}
+		})();
+	</script>
+</body>
+</html>

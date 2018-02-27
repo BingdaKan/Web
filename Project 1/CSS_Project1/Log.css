@@ -1,0 +1,36 @@
+.navigation{
+	position: fixed;
+	left: -150px;
+	margin:20px;
+	opacity: 0.4;
+	display: block;
+	text-decoration: none;
+	text-align: center;
+	padding: 1em;
+	width: 140px;
+	height: 300;
+	border-radius: 10px;
+	color: #4876FF;
+	background-color: #7BACFF;
+	transition-duration: 1s;
+}
+
+.navigation:hover, .navigation:focus{
+	left:-20px;
+	opacity: 0.7;
+}
+
+.logTitle{
+	font-family: 'Coda', cursive;
+	color: #000;
+	margin-bottom: 15px;
+}
+
+.logIpt{
+	border: none;
+	margin: 0 auto;
+	margin-bottom: 15px;
+	width: 130px;
+	height: 25px;
+	border-radius: 5px;
+}

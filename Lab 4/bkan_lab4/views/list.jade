@@ -1,0 +1,36 @@
+extend layout
+
+block content
+  
+  h1 Your Shopping Cart
+  br
+  br
+  p
+    a#delete.btn.btn-default(hrer="#") Remove
+    a#add.btn.btn-default(href="/items/add") Add items
+  p Here is a list of items you bought.
+  br
+  table.table
+    thead
+      tr
+        th
+        th ID
+        th Name
+        th Quantity
+        th Price
+        th Brands
+    tbody
+      if !items.length
+        tr
+          td(colspan=5) Go to add an item
+      else
+        each item in items
+          tr
+            td
+              input(type="checkbox", id=item.id)
+            td 
+              a(href="/items/#{item.id}") #{item.id}
+            td #{item.name}
+            td #{item.qty}
+            td $#{item.price}
+            td #{item.brand}

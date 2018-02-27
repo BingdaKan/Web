@@ -1,0 +1,435 @@
+<html>
+    <meta charset="utf-8" />
+    <title>打蟹</title>
+    <style>
+        body{
+            background:gray;
+            text-align:center;
+        }
+        canvas{
+            background:white;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="1024px" height="576px"></canvas>
+        <div style="display:none;">
+            <img src="界面.png" id="background" />
+            <img src="锤子.png" id="hammer" />
+            <img src="锤子1.png" id="hammer1" />
+            <img src="洞前.png" id="hole1"/>
+            <img src="洞后.png" id="hole2" />
+            <img src="数字.png" id="number" />
+            <img src="大螃蟹.png" id="big_crab" />
+            <img src="小螃蟹1.png" id="crab1" />
+            <img src="小螃蟹2.png" id="crab2" />
+            <img src="小螃蟹3.png" id="crab3" />
+            <img src="生命.png" id="life" />
+        </div>
+        <audio id="music1" preload="auto" src="打蟹-1.mp3" />
+        <audio id="music2" preload="auto" src="打蟹-2.mp3" />
+        <audio id="music3" preload="auto" src="打蟹-3.mp3" />
+        <audio id="music4" preload="auto" src="打蟹-4.mp3" />
+        <script>
+        var game = (function(){
+            var that = {};
+            that.canvas = document.getElementById('canvas');
+            that.cWidth = that.canvas.width;
+            that.cHeight = that.canvas.height;
+            that.cc = that.canvas.getContext('2d');
+            that.images = {
+                'background' : document.getElementById('background'),
+                'hammer' : document.getElementById('hammer'),
+                'hammer1' : document.getElementById('hammer1'),
+                'hole1' : document.getElementById('hole1'),
+                'hole2' : document.getElementById('hole2'),
+                'number' : document.getElementById('number'),
+                'bigCrab' : document.getElementById('big_crab'),
+                'crab1' : document.getElementById('crab1'),
+                'crab2' : document.getElementById('crab2'),
+                'crab3' : document.getElementById('crab3'),
+                'life' : document.getElementById('life')
+            };
+            that.musics = {
+                'music1' : document.getElementById('music1'),
+                'music2' : document.getElementById('music2'),
+                'music3' : document.getElementById('music3'),
+                'music4' : document.getElementById('music4')
+            };
+            that.holes = [[450,100], [300,235], [670,180], [445,375], [150,390]];
+            that.state = 0; //0: 正常 1: 打中 2: 打错 3: 结束
+            that.formula = [];
+            that.life = 3;
+            that.crabs = [];
+             
+            that.drawBackground = function(){
+                that.cc.drawImage(that.images.background, 0, 0, that.cWidth, that.cHeight);
+                that.cc.drawImage(that.images.hole1, that.holes[0][0], that.holes[0][1], that.images.hole1.width, that.images.hole1.height);
+                that.cc.drawImage(that.images.hole2, that.holes[0][0], that.holes[0][1], that.images.hole2.width, that.images.hole2.height);
+                 
+                that.cc.drawImage(that.images.hole1, that.holes[1][0], that.holes[1][1], that.images.hole1.width, that.images.hole1.height);
+                that.cc.drawImage(that.images.hole2, that.holes[1][0], that.holes[1][1], that.images.hole2.width, that.images.hole2.height);
+                 
+                that.cc.drawImage(that.images.hole1, that.holes[2][0], that.holes[2][1], that.images.hole1.width, that.images.hole1.height);
+                that.cc.drawImage(that.images.hole2, that.holes[2][0], that.holes[2][1], that.images.hole2.width, that.images.hole2.height);
+                 
+                that.cc.drawImage(that.images.hole1, that.holes[3][0], that.holes[3][1], that.images.hole1.width, that.images.hole1.height);
+                that.cc.drawImage(that.images.hole2, that.holes[3][0], that.holes[3][1], that.images.hole2.width, that.images.hole2.height);
+                 
+                that.cc.drawImage(that.images.hole1, that.holes[4][0], that.holes[4][1], that.images.hole1.width, that.images.hole1.height);
+                that.cc.drawImage(that.images.hole2, that.holes[4][0], that.holes[4][1], that.images.hole2.width, that.images.hole2.height);
+            };
+             
+            that.clearCanvas = function(){
+                that.cc.clearRect(0, 0, that.cWidth, that.cHeight);
+            };
+             
+            that.getNumY = function(num){
+                var n;
+                switch(num){
+                    case '0' : n = 3; break;
+                    case '1' : n = 43; break;
+                    case '2' : n = 82; break;
+                    case '3' : n = 122; break;
+                    case '4' : n = 163; break;
+                    case '5' : n = 203; break;
+                    case '6' : n = 243; break;
+                    case '7' : n = 283; break;
+                    case '8' : n = 323; break;
+                    case '9' : n = 363; break;
+                    case '+' : n = 403; break;
+                    case '-' : n = 443; break;
+                    case '*' : n = 483; break;
+                    case '/' : n = 523; break;
+                    default : break;
+                }
+                return n;
+            };
+             
+            that.createFormula = function(){
+                var a = parseInt(Math.random()*30+1);
+                var b = parseInt(Math.random()*30+1);
+                var c = a * b;
+                return [c + '/' + a, b];
+            };
+             
+            that.displayFormula = function(){
+                var len = that.formula[0].length;
+                for(var i = 0; i < len; i ++){
+                    that.cc.drawImage(that.images.number, 0, that.getNumY(that.formula[0].charAt(i)), 35, 35, 200 + i * 32, 60, 32, 32);
+                }
+            };
+             
+            that.init = function(){
+                that.formula = that.createFormula();
+                that.bigCrab = new BigCrab();
+                that.state = 0;
+                that.life = 3;
+                for(var i  = 0; i < 5; i++){
+                    var crab = new Crab();
+                    crab.inHole = game.holes[i];
+                    that.crabs.push(crab);
+                }
+                that.crabs[0].number = that.formula[1];
+                that.hammer = new Hammer();
+            }
+             
+            that.checkClick = function(x, y){
+                if((that.crabs[0].inHole[0]+240) > x && that.crabs[0].inHole[0] < x && that.crabs[0].inHole[1] < y && (that.crabs[0].inHole[1]+50) > y){
+                    return 0;
+                }else{ 
+                    for(var i = that.crabsToShow.length - 1; i > 0; i--){
+                        if((that.crabs[that.crabsToShow[i]].inHole[0]+240) > x && that.crabs[that.crabsToShow[i]].inHole[0] < x && that.crabs[that.crabsToShow[i]].inHole[1] < y && (that.crabs[that.crabsToShow[i]].inHole[1]+50) >y){
+                            return 1;
+                        }
+                    }
+                }
+            };
+             
+            that.displayLife = function(){
+                for(var i=0;i<that.life;i++){
+                    that.cc.drawImage(that.images.life, 0, 0, that.images.life.width, that.images.life.height, 380-i*40, 520, 20, 20);
+                }
+            };
+             
+            return that;
+        })();
+         
+        var Hammer = function(){
+            this.state = 0;
+             
+            this.x = 0;
+            this.y = 0;
+             
+            this.display = function(){
+                var image = game.images.hammer;
+                if(this.state != 0){
+                    image = game.images.hammer1;
+                }
+                game.cc.drawImage(image, this.x, this.y, image.width, image.height);
+            };
+             
+        }
+         
+        var BigCrab = function(){
+            this.blood = 100;
+             
+            this.displayBlood = function(){
+                var num = this.blood;
+                for(var i = 0; i < 3; i++){
+                    if(num != 0){
+                        game.cc.drawImage(game.images.number, 0, game.getNumY((num % 10) + ''), 35, 35, 185 - i * 20, 520, 25, 25);
+                        num = parseInt(num / 10);
+                    }else{
+                        game.cc.drawImage(game.images.number, 0, 3, 35, 35, 185 - i * 20, 520, 25, 25);
+                    }
+                }
+            };
+             
+            var n=0;
+             
+            this.displayMotion = function(m){
+                switch(m){
+                    case 3:
+                    case 0:
+                        if(n > 29){
+                            n = 0;
+                        }
+                        game.cc.drawImage(game.images.bigCrab, n % 6 * 400, parseInt(n / 6) * 300, 400, 300, 40, 70, 320, 240);
+                        n++;
+                        break;
+                    case 1:
+                        if(n > 1){
+                            n = 0;
+                        }
+                        game.cc.drawImage(game.images.bigCrab, n * 400, (parseInt(n / 6) +10) * 300, 400, 300, 40, 70, 320, 240);
+                        n++;
+                        break;
+                    case 2:
+                        if(n > 1){
+                            n = 0;
+                        }
+                        game.cc.drawImage(game.images.bigCrab, n * 400, (parseInt(n / 6) +9) * 300, 400, 300, 40, 70, 320, 240);
+                        n++;
+                        break;
+                }
+            };
+        };
+         
+        var Crab = function(){
+            this.number = parseInt(Math.random()*99+1);
+             
+            this.inHole = game.holes[parseInt(Math.random()*5)];
+             
+            this.displayNumber = function(){
+                var num = this.number;
+                for(var i = 0; i < 2; i++){
+                    game.cc.drawImage(game.images.number, 0, game.getNumY((num % 10) + ''), 35, 35, this.inHole[0]+130-35*i, this.inHole[1]+70, 35, 35);
+                    num = parseInt(num / 10);
+                    if(num == 0){
+                        break;
+                    }
+                }
+            }
+             
+            var n = 0;
+             
+            var image = eval("game.images.crab" + parseInt(Math.random()*3+1));
+             
+            this.display = function(i){
+                if(i != undefined){
+                    n = i;
+                }
+                if(n > 59){
+                    game.cc.drawImage(image, 0, 0, 220, 150, this.inHole[0]+20, this.inHole[1]-100, 220, 150);
+                    this.displayNumber();
+                    game.displayFormula();
+                }else{
+                    game.cc.drawImage(image, n % 10 * 220, parseInt(n / 10) * 150, 220, 150, this.inHole[0]+20, this.inHole[1]-41-n, 220, 150);
+                    game.cc.drawImage(game.images.hole1, this.inHole[0], this.inHole[1], game.images.hole1.width, game.images.hole1.height);
+                }
+                n++;
+            };
+             
+            this.dismiss = function(i){
+                if(i != undefined){
+                    n = i;
+                }
+                if(n < 60){
+                    game.cc.drawImage(image, n % 10 * 220, parseInt(n / 10) * 150, 220, 150, this.inHole[0]+20, this.inHole[1]-100+n, 220, 150);
+                    game.cc.drawImage(game.images.hole1, this.inHole[0], this.inHole[1], game.images.hole1.width, game.images.hole1.height);
+                }
+                n++;
+            };
+             
+            this.deth = function(i){
+                if(i != undefined){
+                    n = i;
+                }
+                if(n < 24){
+                    game.cc.drawImage(image, n % 10 * 220, (parseInt(n / 10) + 6) * 150, 220, 150, this.inHole[0], this.inHole[1]-100, 220, 150);
+                }else{
+                    game.cc.drawImage(image, 660, 1200, 220, 150, this.inHole[0], this.inHole[1]-100, 220, 150);
+                }
+                this.displayNumber();
+                n++;
+            };
+             
+            this.goInToHole = function(i){
+                if(i != undefined){
+                    n = i;
+                }
+                if(n < 60){
+                    game.cc.drawImage(image, n % 10 * 220, parseInt(n / 10) * 150, 220, 150, this.inHole[0]+138-n*2, this.inHole[1]-100, 220, 150);
+                    game.cc.drawImage(game.images.hole1, this.inHole[0], this.inHole[1], game.images.hole1.width, game.images.hole1.height);
+                }else if(n < 120){
+                    game.cc.drawImage(image, (n - 60) % 10 * 220, parseInt((n - 60) / 10) * 150, 220, 150, this.inHole[0]+20, this.inHole[1]-160 + n, 220, 150);
+                    game.cc.drawImage(game.images.hole1, this.inHole[0], this.inHole[1], game.images.hole1.width, game.images.hole1.height);
+                }
+                n++;
+            };
+        };
+         
+        var nu = 0;
+         
+        var b = function(){
+            game.drawBackground();
+            game.bigCrab.displayMotion(game.state);
+            game.bigCrab.displayBlood();
+            game.displayLife();
+            if(nu == 0){
+                var nn = parseInt(Math.random()*4+2);
+                game.crabsToShow = [0];
+                for(var i = 0; i < nn; i++){
+                    var n = (nn + i * 2) % 3 + 1;
+                    var str = game.crabsToShow.join();
+                    if(str.indexOf(n) == -1){
+                        game.crabsToShow.push(n);
+                    }
+                }
+                var e = game.crabs[game.crabsToShow[1]].inHole;
+                game.crabs[game.crabsToShow[1]].inHole = game.crabs[game.crabsToShow[0]].inHole;
+                game.crabs[game.crabsToShow[0]].inHole = e;
+                game.crabs[game.crabsToShow[0]].display(0);
+                for(var i = game.crabsToShow.length - 1; i > 0; i--){
+                    game.crabs[game.crabsToShow[i]].number = parseInt(Math.random()*99+1);
+                    game.crabs[game.crabsToShow[i]].display(0);
+                }
+            }else if(nu < 70){
+                for(var i in game.crabsToShow){
+                    game.crabs[game.crabsToShow[i]].display();
+                }
+            }else if(nu == 70){
+                game.canvas.onclick = function(e){
+                    var t = game.checkClick(e.offsetX, e.offsetY);
+                    switch(t){
+                        case 0: //打中
+                            game.state = 1;
+                            game.crabs[0].deth(0);
+                            game.musics.music2.play();
+                            game.bigCrab.blood -= 10;
+                            if(game.bigCrab.blood == 0){
+                                game.state = 3;
+                                nu = 179;
+                                game.musics.music3.play();
+                                alert('胜利');
+                                break;
+                            }
+                            nu = 70;
+                            console.log('打中');
+                            break;
+                        case 1: //打错
+                            game.life--;
+                            if(game.life == 0){
+                                game.musics.music4.play();
+                                alert('失败');
+                                game.state = 3;
+                            }else{
+                                game.state = 2;
+                                game.musics.music1.play();
+                            }
+                            console.log('打错');
+                            //game.crabs[0].happy(0);
+                            nu = 70;
+                            break;
+                        default: //其他情况
+                            game.state = 0;
+                            break;
+                    }
+                };
+                game.canvas.onmousedown=function(){
+                    game.hammer.state = 1;
+                };
+                game.canvas.onmouseup=function(){
+                    game.hammer.state = 0;
+                };
+                if(game.state == 1){
+                    game.crabs[0].deth();
+                }else{
+                    game.crabs[0].display();
+                }
+                for(var i = game.crabsToShow.length-1; i > 0; i--){
+                    game.crabs[game.crabsToShow[i]].display();
+                }
+            }else if(nu > 70 && nu < 150){
+                if(game.state == 1){
+                    game.crabs[0].deth();
+                }else{
+                    game.crabs[0].display();
+                }
+                for(var i = game.crabsToShow.length-1; i > 0; i--){
+                    game.crabs[game.crabsToShow[i]].display();
+                }
+            }else if(nu == 150){
+                if(game.state == 3){
+                    game.canvas.onclick = null;
+                    return;
+                }
+                if(game.state == 1){
+                    game.formula = game.createFormula();
+                    game.crabs[0].number = game.formula[1];
+                }
+                game.state = 0;
+                game.canvas.onclick = null;
+                for(var i in game.crabsToShow){
+                    game.crabs[game.crabsToShow[i]].dismiss(0);
+                }
+            }else if(nu > 150 && nu < 210){
+                for(var i in game.crabsToShow){
+                    game.crabs[game.crabsToShow[i]].dismiss();
+                }
+            }else{
+                nu = -1;
+            }
+            game.hammer.display();
+            setTimeout(b, 30);
+            nu++;
+        };
+         
+        var a = function(){
+            game.drawBackground();
+            game.bigCrab.displayMotion(game.state);
+            game.bigCrab.displayBlood();
+            game.displayLife();
+            for(var i in game.crabs){
+                game.crabs[i].goInToHole();
+            }
+            if(nu < 180){
+                setTimeout(a, 30);
+                nu++;
+            }else{
+                nu = 0;
+                b();
+            }
+        };
+         
+        window.onload = function(){
+            game.init();
+            a();
+            game.canvas.onmousemove=function(e){
+                game.hammer.x = e.offsetX-100;
+                game.hammer.y = e.offsetY-150;
+            };
+        };
+        </script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image:url('../images/background.jpg'); 
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#delete{
+	margin-right: 20px;
+}
+
+.table thead tr{
+	background-color: #C8CFFF;
+	opacity: 0.8;
+}
+
+.table tbody tr:hover{
+	background-color: #F1F1F1;
+	opacity: 0.8;
+}

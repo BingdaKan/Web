@@ -1,0 +1,58 @@
+table{
+	word-wrap: break-word;
+	table-layout:fixed;
+	margin: 0 auto;
+	width: 1000px;
+	border:1px solid;
+	border-color: #D5D5D5;
+	border-collapse: collapse;
+}
+
+table tr th{
+	color: #FFF;
+	font-family: 'Coda', cursive;
+	text-align: left;
+	height: 40px;
+	border-color: #D5D5D5;
+}
+
+table tr td{
+	text-align: left;
+	height: 40px;
+	border:1px solid;
+	border-color: #D5D5D5;
+}
+
+table tr:hover{
+	background-color: #FFFBDD;
+}
+
+#throw th{
+	background-color: #323232;
+	border-top: 3px solid black;
+	border-bottom: 3px solid black;
+}
+
+.nameValue{
+	width: 445px;
+}
+
+#thsub{
+	width: 450px;
+}
+
+#thdel{
+	width: 100px;
+}
+
+#collapse{
+	font-weight: 400;
+	text-align: center;
+	color:#FFF;
+	border: none;
+	background-color: #323232;
+	width: 100px;
+}
+
+
+

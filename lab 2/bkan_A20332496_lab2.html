@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+    
+	body{
+		text-align: center;
+	}
+
+	button{
+        border-radius:6px;
+        background: #FFF;
+        border-color: #000;
+        width: 100px;
+		margin: 20px;
+		width: 100px;
+	}
+
+    button:hover{
+        border-color: #659CBB;
+    }
+
+    #results{
+        border-collapse: collapse;
+        text-align: left;
+        margin: 0 auto;
+        width: 980px;
+    }
+
+    #results #idNum{
+        width: 80px;
+    }
+
+    #results #fname{
+        width: 130px;
+    }
+
+    #results #lname{
+        width: 130px;
+    }
+
+    #results #title{
+        width: 192px;
+    }
+
+    #results #email{
+        width: 212px;
+    }
+
+    #results #sex{
+        width: 80px;
+    }
+
+    #results #act{
+        width: 80px;
+    }
+
+    #results tr td{
+        border: solid;
+        height: 40px;
+    }
+
+    #results #head{
+        background-color: #B0B0B0;
+        font-weight: 700;
+    }
+
+    #results .data{
+        background-color: #F0F0F0;
+    }
+    
+	</style>
+</head>
+
+<body>
+	<h1>ITMD - 565 - Lab 2</h1>
+	<h2>Bingda Kan, bkan@hawk.iit.edu</h2>
+	<button id = "load" onclick="jsAjaxHandler()" type="button">Load Data</button>
+	<button id = "reset" onclick = "deleteJSTable()" disabled = "true">Reset</button>
+	<h1 id = "title"> Employee List </h1>
+    <table id = "results">
+        <tr id = 'head'>
+            <td id = 'idNum'> ID </td>
+            <td id = 'fname'> First Name </td>
+            <td id = 'lname'> Last Name </td>
+            <td id = 'title'> Title </td>
+            <td id = 'email'> Email </td>
+            <td id = 'sex'> Gender </td>
+            <td id = 'act'> Active </td>
+        </tr>
+    </table>
+
+	<script type="text/javascript">
+    var btn_load = document.getElementById("load");
+    var btn_reset = document.getElementById("reset");
+
+    function jsAjaxHandler(){
+        var resultDiv = document.getElementById('results');
+
+        btn_load.disabled = true;
+        btn_reset.disabled = false;
+
+        var myRequest = new XMLHttpRequest();
+        myRequest.onreadystatechange = function(){
+            if (myRequest.readyState === 4 && myRequest.status === 200) {
+                var myArray = JSON.parse(myRequest.responseText);
+                parseData(myArray);
+            }
+        };
+        myRequest.open('GET', 'http://libertyville.rice.iit.edu/scripts/lab2.php', true);
+        myRequest.send();
+
+        function parseData(arr) {
+            
+            resultDiv.style.border = "solid";
+            for (var i = 0; i < arr.length; i++){
+                if(i%2 == 0){
+                    resultDiv.innerHTML += "<tr>" + "<td>" + arr[i].id + "</td>" + "<td>" + arr[i].first_name + "</td>" + "<td>" + arr[i].last_name + "</td>" + "<td>" + arr[i].title + "</td>" + "<td>" + arr[i].email + "</td>"  + "<td>" + arr[i].gender + "</td>"+ "<td id = 'actColor" + i + "'>" + arr[i].active + "</td>" + "</tr>";
+                }else{
+                    resultDiv.innerHTML += "<tr class = 'data'>" + "<td>" + arr[i].id + "</td>" + "<td>" + arr[i].first_name + "</td>" + "<td>" + arr[i].last_name + "</td>" + "<td>" + arr[i].title + "</td>" + "<td>" + arr[i].email + "</td>"  + "<td>" + arr[i].gender + "</td>"+ "<td id = 'actColor" + i + "'>" + arr[i].active + "</td>" + "</tr>";
+                }
+
+                var actBack = document.getElementById("actColor" + i);
+                if(arr[i].active == true){
+                    actBack.style.backgroundColor = "green";
+                }else{
+                    actBack.style.backgroundColor = "red";
+                }
+            };
+        }
+    }
+    
+    function deleteJSTable(){
+        btn_load.disabled = false;
+        btn_reset.disabled = true;
+        var resultDiv = document.getElementById('results');
+        while (resultDiv.firstChild) {
+            resultDiv.removeChild(resultDiv.firstChild);
+            }
+        resultDiv.innerHTML += "<tr id = 'head'>" + "<td id = 'idNum'> ID </td>" + "<td id = 'fname'> First Name </td>"  + "<td id ='lname'> Last Name </td>" + "<td id = 'title'> Title </td>" + "<td id = 'email'> Email </td>" + "<td id = 'sex'> Gender </td>" + "<td id = 'act'> Active </td>";
+    }
+
+	</script>
+</body>

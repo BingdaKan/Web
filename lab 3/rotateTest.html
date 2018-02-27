@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HTML5 Canvas Transformation</title>
+</head>
+<body>
+
+  <script>
+    // Create our canvas and append it to the document body
+    var stage = document.createElement("canvas");
+    stage.width = 320;
+    stage.height = 240;
+    
+    document.body.appendChild(stage);
+    // Grab a reference to the canvas' 2D context
+    var ctx = stage.getContext("2d");
+    // Paint a background color
+    ctx.fillStyle = "cornflowerblue";
+    ctx.fillRect(0, 0, stage.width, stage.height);
+   
+    tx.save();
+
+                ctx.fillStyle = '#00cc00';
+                ctx.rotate((Math.PI/180)*45);
+
+                ctx.fillRect(150,20,70,70);
+                ctx.restore();
+}
+ 
+  </script>
+
+</body>
+</html>
